@@ -12,6 +12,7 @@ const seedProducts = [
     price: 349999,
     oldPrice: 399999,
     icon: "📱",
+    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop",
     category: "Electronics",
   },
   {
@@ -20,6 +21,7 @@ const seedProducts = [
     price: 189999,
     oldPrice: 219999,
     icon: "⌚",
+    image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&h=600&fit=crop",
     category: "Watches",
   },
   {
@@ -28,6 +30,7 @@ const seedProducts = [
     price: 12999,
     oldPrice: 17999,
     icon: "🎒",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=600&fit=crop",
     category: "Accessories",
   },
   {
@@ -36,6 +39,7 @@ const seedProducts = [
     price: 1499,
     oldPrice: 1999,
     icon: "📚",
+    image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=600&h=600&fit=crop",
     category: "Stationery",
   },
   {
@@ -44,6 +48,7 @@ const seedProducts = [
     price: 24999,
     oldPrice: 34999,
     icon: "🎧",
+    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&h=600&fit=crop",
     category: "Electronics",
   },
   {
@@ -52,6 +57,7 @@ const seedProducts = [
     price: 8999,
     oldPrice: 12999,
     icon: "⌚",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop",
     category: "Watches",
   },
 ];
@@ -62,7 +68,7 @@ mongoose
     console.log("Connected. Seeding products...");
     await Product.deleteMany({});
     await Product.insertMany(seedProducts);
-    console.log(`✅ ${seedProducts.length} products added!`);
+    console.log(`✅ ${seedProducts.length} products added with images!`);
     process.exit(0);
   })
   .catch((err) => {
