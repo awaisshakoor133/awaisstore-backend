@@ -19,6 +19,7 @@ const sendUser = (user) => ({
   phone: user.phone,
   address: user.address,
   city: user.city,
+  addresses: user.addresses || [],     // ✅ NAYA
   role: user.role,
 });
 
@@ -164,6 +165,116 @@ router.put("/profile", protect, async (req, res) => {
       success: true,
       message: "Profile updated successfully",
       user: sendUser(user),
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+// ============================================================
+// ADDRESS ROUTES
+// ============================================================
+
+// POST /api/auth/addresses — Add new address
+router.post("/addresses", protect, async (req, res) => {
+  try {
+    const { label, name, phone, address, city, isDefault } = req.body;
+
+    if (!name || !phone || !address || !city) {
+      return res.status(400).json({ error: "All fields required" });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // Agar isDefault true hai → baaki sab false karo
+    if (isDefault) {
+      user.addresses.forEach((addr) => {
+        addr.isDefault = false;
+      });
+    }
+
+    // Agar pehla address hai → default banao
+    const isFirst = user.addresses.length === 0;
+
+    user.addresses.push({
+      label: label || "Home",
+      name,
+      phone,
+      address,
+      city,
+      isDefault: isDefault || isFirst,
+    });
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Address added successfully",
+      addresses: user.addresses,
+    });
+  } catch (err) {
+    console.error("Add address error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PUT /api/auth/addresses/:id — Update address
+router.put("/addresses/:id", protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const address = user.addresses.id(req.params.id);
+    if (!address) return res.status(404).json({ error: "Address not found" });
+
+    const { label, name, phone, address: addr, city, isDefault } = req.body;
+
+    if (label !== undefined) address.label = label;
+    if (name !== undefined) address.name = name;
+    if (phone !== undefined) address.phone = phone;
+    if (addr !== undefined) address.address = addr;
+    if (city !== undefined) address.city = city;
+
+    if (isDefault) {
+      user.addresses.forEach((a) => {
+        a.isDefault = false;
+      });
+      address.isDefault = true;
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Address updated",
+      addresses: user.addresses,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /api/auth/addresses/:id — Delete address
+router.delete("/addresses/:id", protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.addresses = user.addresses.filter(
+      (a) => a._id.toString() !== req.params.id
+    );
+
+    // Agar default address delete hua → pehla address default banao
+    if (user.addresses.length > 0 && !user.addresses.some((a) => a.isDefault)) {
+      user.addresses[0].isDefault = true;
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Address deleted",
+      addresses: user.addresses,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
