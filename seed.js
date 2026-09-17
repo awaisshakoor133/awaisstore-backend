@@ -75,3 +75,44 @@ mongoose
     console.error("Seed error:", err.message);
     process.exit(1);
   });
+  const seedProducts = [
+  // ... purane 6 products
+  
+  {
+    name: "Samsung Galaxy S24 Ultra",
+    description: "Latest Samsung flagship with S Pen and 200MP camera",
+    price: 319999,
+    oldPrice: 349999,
+    icon: "📱",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&h=600&fit=crop",
+    category: "Electronics",
+  },
+  {
+    name: "AirPods Pro 2",
+    description: "Active noise cancellation with 6h battery",
+    price: 59999,
+    oldPrice: 69999,
+    icon: "🎧",
+    image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=600&h=600&fit=crop",
+    category: "Electronics",
+  },
+  {
+    name: "MacBook Air M3",
+    description: "Ultra-thin laptop with M3 chip and 18h battery",
+    price: 449999,
+    oldPrice: 499999,
+    icon: "💻",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=600&fit=crop",
+    category: "Electronics",
+  },
+  {
+    name: "Samsung Galaxy Watch 6",
+    description: "Advanced health tracking with AMOLED display",
+    price: 89999,
+    oldPrice: 109999,
+    icon: "⌚",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop",
+    category: "Watches",
+  },
+  // ... aur products
+];

@@ -21,7 +21,7 @@ app.use(express.json());
 
 // Test Route
 app.get("/", (req, res) => {
-  res.json({ message: "AwaisStore Backend is Running 🚀" });
+  res.json({ message: "Awais Mobile-Zone Backend is Running 🚀" });
 });
 
 // API Routes
