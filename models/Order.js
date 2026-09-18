@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema(
   {
     customer: {
-      name:    { type: String, required: true },
-      phone:   { type: String, required: true },
-      address: { type: String, required: true },
-      city:    { type: String, required: true },
-      payment: { type: String, default: "Cash on Delivery" },
-    },
+  name: { type: String, required: true },
+  email: { type: String, default: "" },
+  phone: { type: String, required: true },
+  address: { type: String, required: true },
+  city: { type: String, required: true },
+  payment: { type: String, default: "Cash on Delivery" },
+},
     products: [
       {
         id:       String,
