@@ -9,6 +9,8 @@ const orderSchema = new mongoose.Schema(
   address: { type: String, required: true },
   city: { type: String, required: true },
   payment: { type: String, default: "Cash on Delivery" },
+  coupon: { type: String, default: null },
+  discount: { type: Number, default: 0 },
 },
     products: [
       {
