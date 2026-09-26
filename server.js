@@ -1,3 +1,4 @@
+const analyticsRoutes = require("./routes/analytics");
 const reviewRoutes = require("./routes/reviews");
 const couponRoutes = require("./routes/coupons");
 const express = require("express");
@@ -38,6 +39,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // ✅ MongoDB connect
 console.log("🔌 Connecting to MongoDB...");
