@@ -1,3 +1,4 @@
+const { sendEmail, welcomeTemplate } = require("../services/email");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -52,6 +53,15 @@ router.post("/signup", async (req, res) => {
     // Create user
     const user = new User({ name, email, phone, password });
     await user.save();
+    
+    // Send welcome email
+sendEmail({
+  to: user.email,
+  subject: "Welcome to Awais Mobile-Zone! 🎉",
+  html: welcomeTemplate(user),
+}).catch((err) =>
+  console.error("Welcome email failed:", err)
+);
 
     // Generate token
     const token = generateToken(user._id);
