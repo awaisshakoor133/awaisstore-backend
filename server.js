@@ -1,3 +1,4 @@
+const blogRoutes = require("./routes/blogs");
 const analyticsRoutes = require("./routes/analytics");
 const reviewRoutes = require("./routes/reviews");
 const couponRoutes = require("./routes/coupons");
@@ -38,8 +39,10 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api/blogs", blogRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/analytics", analyticsRoutes);
+
 
 // ✅ MongoDB connect
 console.log("🔌 Connecting to MongoDB...");
