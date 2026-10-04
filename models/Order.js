@@ -13,24 +13,43 @@ const orderSchema = new mongoose.Schema(
 
     products: [
       {
-        id:       String,
-        name:     String,
-        price:    Number,
+        id: String,
+        name: String,
+        price: Number,
         quantity: Number,
-        icon:     String,
+        icon: String,
       },
     ],
 
     total: { type: Number, required: true },
 
-    // ✅ Coupon + Discount — order level
     coupon: { type: String, default: null },
     discount: { type: Number, default: 0 },
 
-    // ✅ Order status (fulfillment)
-    status: { type: String, default: "Confirmed" },
+    // ============ ORDER STATUS ============
+    status: {
+      type: String,
+      enum: [
+        "Pending",
+        "Confirmed",
+        "Shipped",
+        "Out for Delivery",
+        "Delivered",
+        "Cancelled",
+      ],
+      default: "Pending",
+    },
 
-    // ✅ Payment fields (NEW)
+    // ============ STATUS HISTORY (for tracking timeline) ============
+    statusHistory: [
+      {
+        status: String,
+        timestamp: { type: Date, default: Date.now },
+        note: { type: String, default: "" },
+      },
+    ],
+
+    // ============ PAYMENT ============
     paymentStatus: {
       type: String,
       enum: ["pending", "paid", "failed", "refunded"],
@@ -39,7 +58,7 @@ const orderSchema = new mongoose.Schema(
 
     paymentMethod: {
       type: String,
-      default: "cod",  // cod, bank_transfer, jazzcash, easypaisa, stripe
+      default: "cod",
     },
 
     paymentDetails: {
@@ -48,7 +67,6 @@ const orderSchema = new mongoose.Schema(
       amount: Number,
     },
   },
-
   { timestamps: true }
 );
 

@@ -59,7 +59,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// PUT update order status
+// PUT update order (status, note, etc)
 router.put("/:id", async (req, res) => {
   try {
     const oldOrder = await Order.findById(req.params.id);
@@ -68,9 +68,22 @@ router.put("/:id", async (req, res) => {
     const statusChanged =
       req.body.status && req.body.status !== oldOrder.status;
 
+    const updateData = { ...req.body };
+
+    // Push to status history if status changed
+    if (statusChanged) {
+      updateData.$push = {
+        statusHistory: {
+          status: req.body.status,
+          timestamp: new Date(),
+          note: req.body.note || "",
+        },
+      };
+    }
+
     const order = await Order.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
