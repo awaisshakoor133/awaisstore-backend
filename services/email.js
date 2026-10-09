@@ -214,14 +214,26 @@ const baseTemplate = (content) => `
     <div class="body">
       ${content}
     </div>
-    <div class="footer">
-      <p>© 2026 <strong>Awais Mobile-Zone</strong>. All rights reserved.</p>
-      <p>📍 Badin, Pakistan · 📞 0335-2494258</p>
-      <p style="margin-top: 16px;">
-        <a href="https://awaisstore-frontend.vercel.app">Visit Store</a> ·
-        <a href="mailto:awaisshakoor133@gmail.com">Contact Us</a>
-      </p>
-    </div>
+  <div class="footer">
+  <p>© 2026 <strong>Awais Mobile-Zone</strong>. All rights reserved.</p>
+  <p>📍 Badin, Pakistan · 📞 0335-2494258</p>
+  
+  <div style="margin: 20px 0; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+    <a href="https://awaisstore-frontend.vercel.app" style="display: inline-flex; align-items: center; gap: 6px; color: #c8a04b; text-decoration: none; font-size: 13px; font-weight: 600;">
+      🛍️ Shop
+    </a>
+    <a href="https://wa.me/923352494258" style="display: inline-flex; align-items: center; gap: 6px; color: #25D366; text-decoration: none; font-size: 13px; font-weight: 600;">
+      💬 WhatsApp
+    </a>
+    <a href="https://instagram.com/awais_mobilezone" style="display: inline-flex; align-items: center; gap: 6px; color: #E1306C; text-decoration: none; font-size: 13px; font-weight: 600;">
+      📷 Instagram
+    </a>
+  </div>
+  
+  <p style="margin-top: 12px; font-size: 12px; color: #8a8fa3;">
+    You're receiving this email because you placed an order or created an account on Awais Mobile-Zone.
+  </p>
+</div>
   </div>
 </body>
 </html>
@@ -292,9 +304,9 @@ const orderConfirmationTemplate = (order) => {
     <div class="divider"></div>
 
     <p style="text-align: center;">
-      <a href="https://awaisstore-frontend.vercel.app/orders" class="btn">
-        Track Your Order →
-      </a>
+      <a href="https://awaisstore-frontend.vercel.app/orders/${order._id.toString()}" class="btn">
+  Track Your Order →
+</a>
     </p>
 
     <p style="text-align: center; margin-top: 20px; font-size: 13px; color: #8a8fa3;">
@@ -348,27 +360,37 @@ const welcomeTemplate = (user) => {
  */
 const orderStatusTemplate = (order, newStatus) => {
   const statusMessages = {
-    Shipped: {
-      title: "Your Order is on the Way! 🚚",
-      message: "Great news! Your order has been shipped and is on its way to you.",
-      emoji: "🚚",
-    },
-    "Out for Delivery": {
-      title: "Your Order is Out for Delivery! 📦",
-      message: "Your order is out for delivery. It will reach you soon!",
-      emoji: "📦",
-    },
-    Delivered: {
-      title: "Your Order has been Delivered! 🎉",
-      message: "Your order has been successfully delivered. We hope you love it!",
-      emoji: "🎉",
-    },
-    Cancelled: {
-      title: "Order Cancelled",
-      message: "Your order has been cancelled. If this was a mistake, please contact us.",
-      emoji: "❌",
-    },
-  };
+  Pending: {
+    title: "Order Received! 📋",
+    message: "We've received your order and will confirm it shortly.",
+    emoji: "📋",
+  },
+  Confirmed: {
+    title: "Order Confirmed! ✅",
+    message: "Great news! Your order has been confirmed and is being prepared.",
+    emoji: "✅",
+  },
+  Shipped: {
+    title: "Your Order is on the Way! 🚚",
+    message: "Great news! Your order has been shipped and is on its way to you.",
+    emoji: "🚚",
+  },
+  "Out for Delivery": {
+    title: "Your Order is Out for Delivery! 📦",
+    message: "Your order is out for delivery. It will reach you soon!",
+    emoji: "📦",
+  },
+  Delivered: {
+    title: "Your Order has been Delivered! 🎉",
+    message: "Your order has been successfully delivered. We hope you love it!",
+    emoji: "🎉",
+  },
+  Cancelled: {
+    title: "Order Cancelled",
+    message: "Your order has been cancelled. If this was a mistake, please contact us.",
+    emoji: "❌",
+  },
+};
 
   const statusInfo = statusMessages[newStatus] || {
     title: `Order Status Updated: ${newStatus}`,
@@ -399,9 +421,9 @@ const orderStatusTemplate = (order, newStatus) => {
     <div class="divider"></div>
 
     <p style="text-align: center;">
-      <a href="https://awaisstore-frontend.vercel.app/orders" class="btn">
-        View Order Details →
-      </a>
+      <a href="https://awaisstore-frontend.vercel.app/orders/${order._id.toString()}" class="btn">
+  View Order Details →
+</a>
     </p>
   `;
 
