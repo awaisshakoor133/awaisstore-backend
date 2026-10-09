@@ -64,6 +64,15 @@ router.get("/admin/all", async (req, res) => {
 // POST /api/blogs — Create blog (admin)
 router.post("/", async (req, res) => {
   try {
+    // Auto-generate slug if missing
+    if (!req.body.slug && req.body.title) {
+      req.body.slug = req.body.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    }
+
     const blog = new Blog(req.body);
     await blog.save();
     res.status(201).json(blog);

@@ -52,14 +52,15 @@ const blogSchema = new mongoose.Schema(
 );
 
 // Auto-generate slug from title
-blogSchema.pre("save", function (next) {
-  if (this.isModified("title") && !this.slug) {
+blogSchema.pre("validate", function (next) {
+  if (this.title && !this.slug) {
     this.slug = this.title
       .toLowerCase()
+      .trim()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
   }
-  next();
+  
 });
 
 module.exports = mongoose.model("Blog", blogSchema);
