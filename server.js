@@ -1,6 +1,7 @@
 const blogRoutes = require("./routes/blogs");
 const commentRoutes = require("./routes/comments");
 const notificationRoutes = require("./routes/notifications");
+const abandonedCartRoutes = require("./routes/abandonedCarts");
 const analyticsRoutes = require("./routes/analytics");
 const reviewRoutes = require("./routes/reviews");
 const couponRoutes = require("./routes/coupons");
@@ -44,6 +45,7 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/abandoned-carts", abandonedCartRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
