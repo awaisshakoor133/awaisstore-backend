@@ -209,4 +209,38 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// ============================================================
+// GET /api/analytics/categories — Category performance
+// ============================================================
+router.get("/categories", async (req, res) => {
+  try {
+    const products = await Product.find();
+    const productMap = {};
+    products.forEach((p) => {
+      productMap[p._id.toString()] = p.category;
+    });
+
+    const orders = await Order.find();
+
+    const categoryStats = {};
+
+    orders.forEach((order) => {
+      order.products?.forEach((item) => {
+        const category = productMap[item.id] || "Other";
+        if (!categoryStats[category]) {
+          categoryStats[category] = { category, sold: 0, revenue: 0 };
+        }
+        categoryStats[category].sold += item.quantity || 1;
+        categoryStats[category].revenue +=
+          (item.price || 0) * (item.quantity || 1);
+      });
+    });
+
+    res.json(Object.values(categoryStats));
+  } catch (err) {
+    console.error("Category stats error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
