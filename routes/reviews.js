@@ -1,8 +1,44 @@
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const express = require("express");
 const router = express.Router();
 const Review = require("../models/Review");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
+
+// ============================================================
+// CLOUDINARY CONFIG
+// ============================================================
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// ============================================================
+// MULTER SETUP (Max 3 images, 5 MB each)
+// ============================================================
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "awais-mobile-zone/reviews",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [
+      { width: 1000, height: 1000, crop: "limit" },
+      { quality: "auto" },
+      { fetch_format: "auto" },
+    ],
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5 MB per file
+    files: 3, // Max 3 images
+  },
+});
 
 // ============================================================
 // GET /api/reviews/product/:productId — Get all reviews for a product
@@ -239,6 +275,27 @@ router.get("/categories", async (req, res) => {
     res.json(Object.values(categoryStats));
   } catch (err) {
     console.error("Category stats error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============================================================
+// POST /api/reviews/upload — Upload review images (max 3)
+// ============================================================
+router.post("/upload", upload.array("images", 3), async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "No images uploaded" });
+    }
+
+    const images = req.files.map((file) => ({
+      url: file.path,
+      publicId: file.filename,
+    }));
+
+    res.json({ success: true, images });
+  } catch (err) {
+    console.error("Image upload error:", err);
     res.status(500).json({ error: err.message });
   }
 });

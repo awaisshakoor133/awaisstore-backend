@@ -35,6 +35,24 @@ const reviewSchema = new mongoose.Schema(
       required: true,
       maxlength: 1000,
     },
+
+    // ============ IMAGES ============
+images: [
+  {
+    url: {
+      type: String,
+      required: true,
+    },
+    publicId: {
+      type: String,
+      required: true,
+    },
+    uploadedAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+],
     isVerifiedPurchase: {
       type: Boolean,
       default: false,
