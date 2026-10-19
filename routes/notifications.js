@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const webpush = require("web-push");
 const PushSubscription = require("../models/PushSubscription");
+const NotificationLog = require("../models/NotificationLog");
 require("dotenv").config();   // ← YEH ADD KARO
 
 // Setup VAPID (lazy — only when needed)
@@ -131,6 +132,25 @@ router.post("/send", async (req, res) => {
     const sent = results.filter((r) => r.status === "fulfilled").length;
     const failed = results.filter((r) => r.status === "rejected").length;
 
+    // ============ SAVE TO HISTORY ============
+    try {
+      await NotificationLog.create({
+        title,
+        body,
+        url: url || "/",
+        icon: icon || "/icon-192.png",
+        targetType: userEmail ? "specific" : "all",
+        targetEmail: userEmail || null,
+        status: "sent",
+        sent,
+        failed,
+        total: subscriptions.length,
+        sentBy: "admin",
+      });
+    } catch (logErr) {
+      console.error("Log save error:", logErr);
+    }
+
     res.json({
       success: true,
       total: subscriptions.length,
@@ -151,6 +171,36 @@ router.get("/stats", async (req, res) => {
     const total = await PushSubscription.countDocuments({ isActive: true });
     res.json({ activeSubscriptions: total });
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============================================================
+// GET /api/notifications/history — Notification history
+// ============================================================
+router.get("/history", async (req, res) => {
+  try {
+    const { limit = 20 } = req.query;
+
+    const notifications = await NotificationLog.find()
+      .sort({ createdAt: -1 })
+      .limit(Number(limit));
+
+    // Stats
+    const total = await NotificationLog.countDocuments();
+    const totalSent = await NotificationLog.aggregate([
+      { $group: { _id: null, sum: { $sum: "$sent" } } },
+    ]);
+
+    res.json({
+      notifications,
+      stats: {
+        total,
+        totalNotificationsSent: totalSent[0]?.sum || 0,
+      },
+    });
+  } catch (err) {
+    console.error("Get history error:", err);
     res.status(500).json({ error: err.message });
   }
 });
