@@ -4,6 +4,7 @@ const notificationRoutes = require("./routes/notifications");
 const abandonedCartRoutes = require("./routes/abandonedCarts");
 const newsletterRoutes = require("./routes/newsletter");
 const sitemapRoutes = require("./routes/sitemap");
+const aiRoutes = require("./routes/ai");
 const analyticsRoutes = require("./routes/analytics");
 const reviewRoutes = require("./routes/reviews");
 const couponRoutes = require("./routes/coupons");
@@ -50,6 +51,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/abandoned-carts", abandonedCartRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/sitemap.xml", sitemapRoutes);
+app.use("/api/ai", aiRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
